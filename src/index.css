@@ -130,4 +130,75 @@
   .focus-ring {
     @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:rounded-sm;
   }
+
+  /* ── Liquid Glass (Apple-style) ─────────────────────────────── */
+  .glass {
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(24px) saturate(180%) brightness(108%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%) brightness(108%);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.06),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.04);
+  }
+
+  .glass-dark {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.18),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.08);
+  }
+
+  /* Spotlight — mouse-tracking glow (set --mx / --my via JS) */
+  .spotlight {
+    --mx: 50%;
+    --my: 50%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .spotlight::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      280px circle at var(--mx) var(--my),
+      rgba(76, 201, 198, 0.18) 0%,
+      transparent 65%
+    );
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .spotlight:hover::before {
+    opacity: 1;
+  }
+
+  .spotlight-white::before {
+    background: radial-gradient(
+      280px circle at var(--mx) var(--my),
+      rgba(255, 255, 255, 0.18) 0%,
+      transparent 65%
+    );
+  }
+
+  /* Glow border on hover */
+  .glow-hover {
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  .glow-hover:hover {
+    box-shadow:
+      0 0 0 1px hsl(var(--cyan) / 0.35),
+      0 20px 60px hsl(var(--cyan) / 0.12),
+      0 8px 24px rgba(0, 0, 0, 0.06);
+  }
 }

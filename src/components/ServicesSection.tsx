@@ -2,7 +2,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { useLocale } from "@/hooks/useLocale";
 import { t } from "@/lib/i18n";
 import { Sparkles, Home, HardHat, Building2 } from "lucide-react";
-import { ReactNode } from "react";
+import { ReactNode, useRef } from "react";
 
 type ServiceConfig = {
   icon: ReactNode;
@@ -30,6 +30,106 @@ const SERVICES_CONFIG: ServiceConfig[] = [
 
 const FOCUS_RING = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2";
 
+function ServiceCard({ s, i, locale, shouldReduceMotion, entrance }: {
+  s: ServiceConfig;
+  i: number;
+  locale: string;
+  shouldReduceMotion: boolean | null;
+  entrance: (d: number) => object;
+}) {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    cardRef.current.style.setProperty("--mx", `${x}%`);
+    cardRef.current.style.setProperty("--my", `${y}%`);
+  };
+
+  return (
+    <motion.div
+      key={s.titleKey}
+      {...entrance(i * 0.1)}
+      whileHover={shouldReduceMotion ? undefined : {
+        y: -10,
+        transition: { duration: 0.28, ease: [0.22, 1, 0.36, 1] as const },
+      }}
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      className="spotlight glow-hover glass group relative rounded-3xl p-8 flex flex-col min-h-[300px] overflow-hidden transition-shadow duration-300"
+    >
+      {/* Subtle top shine line */}
+      <div
+        className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent pointer-events-none"
+        aria-hidden="true"
+      />
+
+      {/* Number badge */}
+      <span
+        className="absolute top-6 right-6 text-4xl font-black text-border/50 group-hover:text-secondary/20 transition-colors duration-300 select-none"
+        aria-hidden="true"
+      >
+        {s.number}
+      </span>
+
+      <div className="relative z-10 flex flex-col flex-1">
+        {/* Icon */}
+        <div className="w-14 h-14 rounded-2xl bg-cyan-light text-secondary flex items-center justify-center mb-6 group-hover:bg-secondary group-hover:text-secondary-foreground transition-colors duration-300 group-hover:scale-110 transform flex-shrink-0 shadow-sm">
+          {s.icon}
+        </div>
+
+        <h3 className="text-lg font-bold text-foreground mb-3 group-hover:text-secondary transition-colors duration-200">
+          {t(s.titleKey, locale as "pt" | "en" | "es")}
+        </h3>
+
+        {s.itemKeys ? (
+          <div className="flex-1 flex flex-col gap-3">
+            <ul className="flex flex-col gap-2" role="list">
+              {s.itemKeys.map((key) => (
+                <li key={key} className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <span className="w-4 h-4 rounded-full bg-secondary/15 text-secondary flex items-center justify-center flex-shrink-0 text-[10px] font-bold" aria-hidden="true">✓</span>
+                  {t(key, locale as "pt" | "en" | "es")}
+                </li>
+              ))}
+            </ul>
+            {s.scheduleKey && s.scheduleItemKeys && (
+              <div className="mt-3 pt-3 border-t border-border/60">
+                <p className="text-[10px] font-bold tracking-widest text-secondary/70 mb-2">{t(s.scheduleKey, locale as "pt" | "en" | "es")}</p>
+                <ul className="flex flex-col gap-1.5" role="list">
+                  {s.scheduleItemKeys.map((key) => (
+                    <li key={key} className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <span className="w-4 h-4 rounded-full bg-secondary/15 text-secondary flex items-center justify-center flex-shrink-0 text-[10px] font-bold" aria-hidden="true">✓</span>
+                      {t(key, locale as "pt" | "en" | "es")}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        ) : (
+          <p className="text-sm text-muted-foreground leading-relaxed flex-1">
+            {t(s.descKey!, locale as "pt" | "en" | "es")}
+          </p>
+        )}
+
+        {/* CTA link */}
+        <a
+          href={t("contact.whatsapp.link", locale as "pt" | "en" | "es")}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`mt-6 inline-flex items-center gap-1 text-xs font-semibold text-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-sm ${FOCUS_RING}`}
+          tabIndex={0}
+        >
+          {locale === "pt" ? "Saiba mais" : locale === "en" ? "Learn more" : "Saber más"}
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </motion.div>
+  );
+}
+
 export default function ServicesSection() {
   const { locale } = useLocale();
   const shouldReduceMotion = useReducedMotion();
@@ -56,82 +156,14 @@ export default function ServicesSection() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {SERVICES_CONFIG.map((s, i) => (
-            <motion.div
+            <ServiceCard
               key={s.titleKey}
-              {...entrance(i * 0.1)}
-              whileHover={shouldReduceMotion ? undefined : {
-                y: -8,
-                transition: { duration: 0.25, ease: [0.22, 1, 0.36, 1] as const },
-              }}
-              className="group relative bg-card rounded-3xl p-8 border border-border hover:border-secondary/40 shadow-sm hover:shadow-xl hover:shadow-secondary/8 transition-shadow transition-colors duration-300 flex flex-col min-h-[300px] overflow-hidden"
-            >
-              {/* Hover gradient */}
-              <div
-                className="absolute inset-0 bg-gradient-to-br from-secondary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                aria-hidden="true"
-              />
-
-              {/* Number badge */}
-              <span
-                className="absolute top-6 right-6 text-4xl font-black text-border group-hover:text-secondary/20 transition-colors duration-300 select-none"
-                aria-hidden="true"
-              >
-                {s.number}
-              </span>
-
-              <div className="relative z-10 flex flex-col flex-1">
-                {/* Icon */}
-                <div className="w-14 h-14 rounded-2xl bg-cyan-light text-secondary flex items-center justify-center mb-6 group-hover:bg-secondary group-hover:text-secondary-foreground transition-colors transition-transform duration-300 group-hover:scale-110 flex-shrink-0">
-                  {s.icon}
-                </div>
-
-                <h3 className="text-lg font-bold text-foreground mb-3 group-hover:text-secondary transition-colors duration-200">
-                  {t(s.titleKey, locale)}
-                </h3>
-
-                {s.itemKeys ? (
-                  <div className="flex-1 flex flex-col gap-3">
-                    <ul className="flex flex-col gap-2" role="list">
-                      {s.itemKeys.map((key) => (
-                        <li key={key} className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <span className="w-4 h-4 rounded-full bg-secondary/15 text-secondary flex items-center justify-center flex-shrink-0 text-[10px] font-bold" aria-hidden="true">✓</span>
-                          {t(key, locale)}
-                        </li>
-                      ))}
-                    </ul>
-                    {s.scheduleKey && s.scheduleItemKeys && (
-                      <div className="mt-3 pt-3 border-t border-border">
-                        <p className="text-[10px] font-bold tracking-widest text-secondary/70 mb-2">{t(s.scheduleKey, locale)}</p>
-                        <ul className="flex flex-col gap-1.5" role="list">
-                          {s.scheduleItemKeys.map((key) => (
-                            <li key={key} className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <span className="w-4 h-4 rounded-full bg-secondary/15 text-secondary flex items-center justify-center flex-shrink-0 text-[10px] font-bold" aria-hidden="true">✓</span>
-                              {t(key, locale)}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <p className="text-sm text-muted-foreground leading-relaxed flex-1">
-                    {t(s.descKey!, locale)}
-                  </p>
-                )}
-
-                {/* CTA link */}
-                <a
-                  href={t("contact.whatsapp.link", locale)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`mt-6 inline-flex items-center gap-1 text-xs font-semibold text-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-sm ${FOCUS_RING}`}
-                  tabIndex={0}
-                >
-                  {locale === "pt" ? "Saiba mais" : locale === "en" ? "Learn more" : "Saber más"}
-                  <span aria-hidden="true">→</span>
-                </a>
-              </div>
-            </motion.div>
+              s={s}
+              i={i}
+              locale={locale}
+              shouldReduceMotion={shouldReduceMotion}
+              entrance={entrance}
+            />
           ))}
         </div>
       </div>

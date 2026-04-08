@@ -2,7 +2,7 @@ import { motion, useReducedMotion } from "framer-motion";
 import { useLocale } from "@/hooks/useLocale";
 import { t } from "@/lib/i18n";
 import heroBg from "@/assets/hero-bg.jpg";
-import { useMemo } from "react";
+import { useMemo, useRef, useCallback } from "react";
 import { Star } from "lucide-react";
 
 const ORB_CONFIGS = Array.from({ length: 6 }, (_, i) => ({
@@ -24,6 +24,23 @@ const FOCUS_RING = "focus-visible:outline-none focus-visible:ring-2 focus-visibl
 export default function HeroSection() {
   const { locale } = useLocale();
   const shouldReduceMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  /* Parallax suave: o container de orbs desloca levemente com o mouse */
+  const orbsContainerRef = useRef<HTMLDivElement>(null);
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    if (shouldReduceMotion || !orbsContainerRef.current) return;
+    const { clientX, clientY, currentTarget } = e;
+    const { width, height } = currentTarget.getBoundingClientRect();
+    const dx = (clientX / width - 0.5) * 18;   // ±9 px
+    const dy = (clientY / height - 0.5) * 12;  // ±6 px
+    orbsContainerRef.current.style.transform = `translate(${dx}px, ${dy}px)`;
+  }, [shouldReduceMotion]);
+
+  const handleMouseLeave = useCallback(() => {
+    if (!orbsContainerRef.current) return;
+    orbsContainerRef.current.style.transform = "translate(0px, 0px)";
+  }, []);
 
   const orbAnimate = shouldReduceMotion
     ? { opacity: 0.15 }
@@ -58,8 +75,11 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
+      ref={sectionRef}
       className="relative min-h-[92vh] flex items-center overflow-hidden"
       aria-label="Hero"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
       {/* Background image */}
       <div className="absolute inset-0" aria-hidden="true">
@@ -75,47 +95,40 @@ export default function HeroSection() {
         <div className="absolute inset-0 bg-gradient-to-r from-background via-background/92 to-background/40" />
       </div>
 
-      {/* Floating orbs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+      {/* Floating orbs — movem suavemente com o mouse */}
+      <div
+        ref={orbsContainerRef}
+        className="absolute inset-0 overflow-hidden pointer-events-none transition-transform duration-700 ease-out"
+        aria-hidden="true"
+      >
         {orbs}
       </div>
 
-      <div className="container mx-auto px-4 relative z-10 py-24">
-        <div className="max-w-2xl">
-          {/* Badge */}
-          <motion.div {...entrance(0.2)}>
-            <div className="inline-flex items-center gap-2 bg-cyan-light text-secondary px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest mb-8 border border-secondary/20">
-              <span className="w-2 h-2 rounded-full bg-secondary animate-pulse" aria-hidden="true" />
-              Orlando, FL
-            </div>
-          </motion.div>
-
+      <div className="container mx-auto px-4 relative z-10 py-32">
+        <div className="max-w-3xl">
           {/* Heading */}
           <motion.h1
-            {...entrance(0.4)}
-            className="text-4xl md:text-6xl font-bold leading-tight text-foreground whitespace-pre-line"
+            {...entrance(0.2)}
+            className="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight text-foreground tracking-tight"
           >
             {t("hero.title", locale)}
           </motion.h1>
 
           {/* Subtitle */}
           <motion.p
-            {...entrance(0.6)}
-            className="mt-6 text-lg md:text-xl text-muted-foreground font-light leading-relaxed max-w-lg"
+            {...entrance(0.4)}
+            className="mt-8 text-lg md:text-xl text-muted-foreground font-light leading-relaxed max-w-xl"
           >
             {t("hero.subtitle", locale)}
           </motion.p>
 
-          {/* CTA */}
-          <motion.div
-            {...entrance(0.8)}
-            className="mt-10 flex flex-col sm:flex-row gap-4"
-          >
+          {/* CTA Button */}
+          <motion.div {...entrance(0.6)} className="mt-12">
             <a
               href={t("contact.whatsapp.link", locale)}
               target="_blank"
               rel="noopener noreferrer"
-              className={`inline-flex items-center justify-center bg-secondary text-secondary-foreground px-8 py-4 rounded-full text-sm font-semibold hover:opacity-90 active:scale-95 transition-opacity transition-transform shadow-lg shadow-secondary/25 ${FOCUS_RING}`}
+              className={`inline-flex items-center justify-center bg-secondary text-secondary-foreground px-10 py-5 rounded-full text-base font-semibold hover:shadow-xl hover:shadow-secondary/30 active:scale-95 transition-shadow transition-transform duration-200 ${FOCUS_RING}`}
             >
               {t("hero.cta", locale)}
             </a>
@@ -123,31 +136,28 @@ export default function HeroSection() {
 
           {/* Trust badges */}
           <motion.div
-            {...entrance(1.0)}
-            className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-xs text-muted-foreground font-medium uppercase tracking-widest"
+            {...entrance(0.8)}
+            className="mt-12 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground font-medium uppercase tracking-widest"
           >
             {(["trust.licensed", "trust.bonded", "trust.insured"] as const).map((key) => (
               <span key={key} className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-success" aria-hidden="true" />
+                <span className="w-1.5 h-1.5 rounded-full bg-secondary/50" aria-hidden="true" />
                 {t(key, locale)}
               </span>
             ))}
           </motion.div>
 
-          {/* Stats bar */}
+          {/* Stats bar — glass cards com spotlight */}
           <motion.div
-            {...entrance(1.2)}
-            className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-4"
+            {...entrance(1.0)}
+            className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-3"
             aria-label="Números do negócio"
           >
             {STATS.map((stat) => (
-              <div
-                key={stat.labelKey}
-                className="flex flex-col items-center sm:items-start gap-0.5 bg-background/60 backdrop-blur-sm border border-border/50 rounded-2xl px-4 py-3"
-              >
-                <span className="text-2xl font-bold text-foreground flex items-center gap-1">
+              <div key={stat.labelKey} className="flex flex-col gap-1">
+                <span className="text-3xl md:text-4xl font-bold text-foreground flex items-center gap-1.5">
                   {stat.value}
-                  {stat.star && <Star className="w-4 h-4 fill-gold text-gold" aria-hidden="true" />}
+                  {stat.star && <Star className="w-5 h-5 md:w-6 md:h-6 fill-gold text-gold" aria-hidden="true" />}
                 </span>
                 <span className="text-xs text-muted-foreground font-medium">{t(stat.labelKey, locale)}</span>
               </div>
