@@ -26,12 +26,19 @@ export const translations: Record<string, Record<Locale, string>> = {
 
   // Services
   "services.title": { pt: "Nossos Serviços Especializados", en: "Our Specialized Services", es: "Nuestros Servicios Especializados" },
-  "services.routine.title": { pt: "Limpeza Rotineira", en: "Routine Cleaning", es: "Limpieza Rutinaria" },
+  "services.routine.title": { pt: "Limpeza Regular", en: "Regular Cleaning", es: "Limpieza Regular" },
   "services.routine.desc": {
     pt: "Mantenha seu espaço impecável com nosso serviço de manutenção regular, garantindo paz de espírito e um ambiente sempre acolhedor.",
     en: "Keep your space spotless with our regular maintenance service, ensuring peace of mind and a welcoming environment.",
     es: "Mantenga su espacio impecable con nuestro servicio de mantenimiento regular, garantizando tranquilidad y un ambiente acogedor.",
   },
+  "services.routine.item1": { pt: "Limpeza de Escritórios", en: "Office Cleaning", es: "Limpieza de Oficinas" },
+  "services.routine.item2": { pt: "Mudanças (Entrada e Saída)", en: "Move-In / Move-Out", es: "Mudanzas (Entrada y Salida)" },
+  "services.routine.item3": { pt: "Janelas", en: "Windows", es: "Ventanas" },
+  "services.routine.schedule": { pt: "HORÁRIOS FLEXÍVEIS", en: "FLEXIBLE SCHEDULES", es: "HORARIOS FLEXIBLES" },
+  "services.routine.weekly": { pt: "Semanal", en: "Weekly", es: "Semanal" },
+  "services.routine.biweekly": { pt: "Quinzenal", en: "Bi-Weekly", es: "Quincenal" },
+  "services.routine.monthly": { pt: "Mensal", en: "Monthly", es: "Mensual" },
   "services.deep.title": { pt: "Limpeza Profunda", en: "Deep Cleaning", es: "Limpieza Profunda" },
   "services.deep.desc": {
     pt: "Uma limpeza meticulosa que alcança cada canto, restaurando a vivacidade e o frescor do seu ambiente com atenção aos detalhes invisíveis.",
@@ -94,6 +101,43 @@ export const translations: Record<string, Record<Locale, string>> = {
   "trust.licensed": { pt: "Licenciado", en: "Licensed", es: "Licenciado" },
   "trust.bonded": { pt: "Garantido", en: "Bonded", es: "Garantizado" },
   "trust.insured": { pt: "Segurado", en: "Insured", es: "Asegurado" },
+
+  // Aria labels
+  "aria.open_menu": { pt: "Abrir menu", en: "Open menu", es: "Abrir menú" },
+  "aria.close_menu": { pt: "Fechar menu", en: "Close menu", es: "Cerrar menú" },
+  "aria.whatsapp": { pt: "Fale conosco pelo WhatsApp", en: "Chat with us on WhatsApp", es: "Chatea con nosotros por WhatsApp" },
+  "aria.lang_select": { pt: "Selecionar idioma", en: "Select language", es: "Seleccionar idioma" },
+
+  // Stats
+  "stats.cleanings": { pt: "Limpezas", en: "Cleanings", es: "Limpiezas" },
+  "stats.rating": { pt: "Avaliação", en: "Rating", es: "Calificación" },
+  "stats.clients": { pt: "Clientes", en: "Clients", es: "Clientes" },
+  "stats.years": { pt: "Anos de Exp.", en: "Yrs Experience", es: "Años de Exp." },
+
+  // Testimonials
+  "testimonials.title": { pt: "O Que Dizem Nossos Clientes", en: "What Our Clients Say", es: "Lo Que Dicen Nuestros Clientes" },
+  "testimonials.subtitle": {
+    pt: "Avaliações reais de clientes reais em Orlando.",
+    en: "Real reviews from real clients in Orlando.",
+    es: "Reseñas reales de clientes reales en Orlando.",
+  },
+
+  // CTA Section
+  "cta.title": {
+    pt: "Pronto Para Uma Limpeza Impecável?",
+    en: "Ready for a Spotless Clean?",
+    es: "¿Listo para una Limpieza Impecable?",
+  },
+  "cta.subtitle": {
+    pt: "Solicite seu orçamento gratuito e sem compromisso agora.",
+    en: "Request your free, no-obligation quote now.",
+    es: "Solicite su presupuesto gratuito y sin compromiso ahora.",
+  },
+  "cta.button": {
+    pt: "Solicite um Orçamento Grátis",
+    en: "Request a Free Quote",
+    es: "Solicite un Presupuesto Gratis",
+  },
 };
 
 export function t(key: string, locale: Locale): string {
