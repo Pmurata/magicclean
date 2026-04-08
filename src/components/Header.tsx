@@ -12,6 +12,12 @@ export default function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    setOpen(false);
+  };
+
   const localeLabels: Record<Locale, string> = { pt: "PT", en: "EN", es: "ES" };
   const localeNames: Record<Locale, string> = { pt: "Português", en: "English", es: "Español" };
 
@@ -53,7 +59,7 @@ export default function Header() {
       >
         <div className="container mx-auto flex items-center justify-between px-4">
           {/* Logo — maior quando não scrollado */}
-          <a href="/" className={`flex items-center gap-2 rounded-md transition-all duration-300 ${FOCUS_RING}`}>
+          <a href="#" onClick={handleLogoClick} className={`flex items-center gap-2 rounded-md transition-all duration-300 ${FOCUS_RING}`}>
             <img src={logo} alt="Magic Clean" className={`w-auto transition-all duration-300 ${scrolled ? "h-10" : "h-16"}`} />
           </a>
 
@@ -134,7 +140,10 @@ export default function Header() {
                   <a
                     key={item.key}
                     href={item.href}
-                    onClick={() => setOpen(false)}
+                    onClick={(e) => {
+                      e.currentTarget.blur();
+                      setTimeout(() => setOpen(false), 50);
+                    }}
                     className={`text-sm font-medium text-muted-foreground hover:text-foreground uppercase tracking-wide py-4 border-b border-border/50 last:border-0 transition-colors ${FOCUS_RING}`}
                   >
                     {t(item.key, locale)}
@@ -170,7 +179,7 @@ export default function Header() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`block text-center bg-primary text-primary-foreground px-5 py-3 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity ${FOCUS_RING}`}
-                  onClick={() => setOpen(false)}
+                  onClick={() => setTimeout(() => setOpen(false), 50)}
                 >
                   {t("nav.cta", locale)}
                 </a>
