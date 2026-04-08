@@ -45,16 +45,16 @@ export default function Header() {
         initial={{ y: -80 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className={`sticky top-0 z-50 transition-[background-color,box-shadow,border-color] duration-300 ${
+        className={`sticky top-0 z-50 transition-[background-color,box-shadow,border-color,padding] duration-300 ${
           scrolled
-            ? "bg-background/98 backdrop-blur-xl shadow-md border-b border-border/60"
-            : "bg-background/80 backdrop-blur-lg border-b border-border/30"
+            ? "bg-background/98 backdrop-blur-xl shadow-md border-b border-border/60 py-2"
+            : "bg-background/80 backdrop-blur-lg border-b border-border/30 py-4"
         }`}
       >
-        <div className="container mx-auto flex items-center justify-between py-3.5 px-4">
-          {/* Logo */}
-          <a href="/" className={`flex items-center gap-2 rounded-md ${FOCUS_RING}`}>
-            <img src={logo} alt="Magic Clean" className="h-10 w-auto" />
+        <div className="container mx-auto flex items-center justify-between px-4">
+          {/* Logo — maior quando não scrollado */}
+          <a href="/" className={`flex items-center gap-2 rounded-md transition-all duration-300 ${FOCUS_RING}`}>
+            <img src={logo} alt="Magic Clean" className={`w-auto transition-all duration-300 ${scrolled ? "h-10" : "h-16"}`} />
           </a>
 
           {/* Desktop Nav */}
