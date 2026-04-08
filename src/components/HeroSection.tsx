@@ -3,7 +3,6 @@ import { useLocale } from "@/hooks/useLocale";
 import { t } from "@/lib/i18n";
 import heroBg from "@/assets/hero-bg.jpg";
 import { useMemo, useRef, useCallback } from "react";
-import { Star } from "lucide-react";
 
 const ORB_CONFIGS = Array.from({ length: 6 }, (_, i) => ({
   id: i,
@@ -12,12 +11,6 @@ const ORB_CONFIGS = Array.from({ length: 6 }, (_, i) => ({
   duration: 14 + i * 2.5,
 }));
 
-const STATS = [
-  { value: "500+", labelKey: "stats.cleanings" },
-  { value: "5.0", labelKey: "stats.rating", star: true },
-  { value: "200+", labelKey: "stats.clients" },
-  { value: "3+", labelKey: "stats.years" },
-];
 
 const FOCUS_RING = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2";
 
@@ -147,22 +140,6 @@ export default function HeroSection() {
             ))}
           </motion.div>
 
-          {/* Stats bar — glass cards com spotlight */}
-          <motion.div
-            {...entrance(1.0)}
-            className="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-3"
-            aria-label="Números do negócio"
-          >
-            {STATS.map((stat) => (
-              <div key={stat.labelKey} className="flex flex-col gap-1">
-                <span className="text-3xl md:text-4xl font-bold text-foreground flex items-center gap-1.5">
-                  {stat.value}
-                  {stat.star && <Star className="w-5 h-5 md:w-6 md:h-6 fill-gold text-gold" aria-hidden="true" />}
-                </span>
-                <span className="text-xs text-muted-foreground font-medium">{t(stat.labelKey, locale)}</span>
-              </div>
-            ))}
-          </motion.div>
         </div>
       </div>
     </section>
