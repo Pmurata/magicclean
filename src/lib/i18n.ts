@@ -9,14 +9,14 @@ export const translations: Record<string, Record<Locale, string>> = {
 
   // Hero
   "hero.title": {
-    pt: "A Ciência da Limpeza,\na Magia da Hospitalidade.",
-    en: "The Science of Cleaning,\nthe Magic of Hospitality.",
-    es: "La Ciencia de la Limpieza,\nla Magia de la Hospitalidad.",
+    pt: "Limpeza que Brilha",
+    en: "Clean Living Starts Here",
+    es: "Limpieza que Brilla",
   },
   "hero.subtitle": {
-    pt: "Licensed, Bonded & Insured. O padrão 5 estrelas de Orlando para sua casa ou Airbnb.",
-    en: "Licensed, Bonded & Insured. Orlando's 5-star standard for your home or Airbnb.",
-    es: "Licensed, Bonded & Insured. El estándar 5 estrellas de Orlando para su hogar o Airbnb.",
+    pt: "5 estrelas em cada detalhe. Licensed, Bonded & Insured.",
+    en: "5-star service in every detail. Licensed, Bonded & Insured.",
+    es: "Servicio 5 estrellas en cada detalle. Licensed, Bonded & Insured.",
   },
   "hero.cta": {
     pt: "Solicite um Orçamento Grátis",
