@@ -19,7 +19,7 @@ const SERVICES_CONFIG: ServiceConfig[] = [
     icon: <Home className="w-6 h-6" />,
     titleKey: "services.routine.title",
     number: "01",
-    itemKeys: ["services.routine.item1", "services.routine.item2", "services.routine.item3"],
+    itemKeys: ["services.routine.item1", "services.routine.item2", "services.routine.item3", "services.routine.item4"],
     scheduleKey: "services.routine.schedule",
     scheduleItemKeys: ["services.routine.weekly", "services.routine.biweekly", "services.routine.monthly"],
   },
